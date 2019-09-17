@@ -1,0 +1,13 @@
+{
+  "name":  "addon@scottco.co",
+  "description": "ignored",
+  "type": "storage",
+  "data": {
+    "sites": {
+      "example.com": {
+        "enabled": true,
+        "style": ""
+      }
+    }
+  }
+}

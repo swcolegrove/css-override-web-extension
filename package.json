@@ -1,0 +1,15 @@
+{
+  "name": "css-override-web-extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "eslint": "^6.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "author": "Scott Colegrove (https://github.com/swcolegrove)",
+  "license": "ISC"
+}
