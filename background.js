@@ -2,7 +2,7 @@ const debug = (msg) => {
   console.log(`css-override-web-extension: ${msg}`);
 };
 
-const getStorageData = function(domainKey) {
+const getStorageData = (domainKey) => {
   return browser.storage.sync.get(domainKey);
 };
 

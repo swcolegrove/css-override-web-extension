@@ -1,4 +1,8 @@
-const getActiveTab = function() {
+const debug = (msg) => {
+  console.log(`css-override-web-extension: ${msg}`);
+};
+
+const getActiveTab = () => {
   return browser.tabs.query({active: true, currentWindow: true}).then(tabs => {
     return tabs[0];
   });
@@ -23,9 +27,8 @@ const toggleStyles = async function() {
 
   const tabData = await getStorageData(tabUrl);
   if (tabData && tabData[tabUrl]) {
-    
+
   } else {
-    console.log('NAW')
     let obj = {};
     obj[tabUrl] = {
       enabled: true
@@ -34,7 +37,7 @@ const toggleStyles = async function() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const btnToggle = document.getElementById("btnToggle");
   btnToggle.addEventListener('click', toggleStyles);
 });
