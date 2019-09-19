@@ -1,3 +1,5 @@
+let ACTIVE_TAB;
+
 const debug = (msg) => {
   console.log(`css-override-web-extension: ${msg}`);
 };
@@ -32,8 +34,7 @@ const updatePopup = (enabled) => {
 
 const toggleStyles = async function() {
   debug('Toggle style')
-  let activeTab = await getActiveTab();
-  const tabUrl = getTabUrl(activeTab);
+  const tabUrl = getTabUrl(ACTIVE_TAB);
   if (!tabUrl) {
     return;
   }
@@ -56,7 +57,7 @@ const toggleStyles = async function() {
   browser.runtime.sendMessage({
     action: 'reloadTab',
     tab: {
-      id: activeTab.id,
+      id: ACTIVE_TAB.id,
       url: tabUrl,
     },
   }).then((message) => {
@@ -65,8 +66,8 @@ const toggleStyles = async function() {
 }
 
 const initializePopup = async function() {
-  let activeTab = await getActiveTab();
-  const tabUrl = getTabUrl(activeTab);
+  ACTIVE_TAB = await getActiveTab();
+  const tabUrl = getTabUrl(ACTIVE_TAB);
 
   let tabData = await getStorageData(tabUrl);
   let enabled = true;
@@ -77,8 +78,25 @@ const initializePopup = async function() {
   }
 };
 
+const openEditorWindow = () => {
+  const createData = {
+    url: '../pages/editor.html',
+    active: true,
+  };
+  browser.tabs.create(createData).then((tab) => {
+    // debug(JSON.stringify(tab))
+    // const msg = {
+    //   url: getTabUrl(ACTIVE_TAB),
+    // };
+    // browser.tabs.sendMessage(tab.id, msg);
+  });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const btnToggle = document.getElementById("btnToggle");
   btnToggle.addEventListener('click', toggleStyles);
+
+  const btnOpenEditor = document.getElementById("btnOpenEditor");
+  btnOpenEditor.addEventListener('click', openEditorWindow);
   initializePopup();
 });
