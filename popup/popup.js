@@ -25,16 +25,30 @@ const toggleStyles = async function() {
     return;
   }
 
-  const tabData = await getStorageData(tabUrl);
+  let tabData = await getStorageData(tabUrl);
   if (tabData && tabData[tabUrl]) {
-
+    console.log('toggle')
+    console.log('tab', tabData)
+    tabData[tabUrl].enabled = !tabData[tabUrl].enabled;
+    await setStorageData(tabData);
   } else {
+    console.log('set initial')
     let obj = {};
     obj[tabUrl] = {
       enabled: true
     };
     await setStorageData(obj);
   }
+
+  browser.runtime.sendMessage({
+    action: 'reloadTab',
+    tab: {
+      id: activeTab.id,
+      url: tabUrl,
+    },
+  }).then((message) => {
+
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -6,7 +6,8 @@
   "version": "1.0",
   "homepage_url": "https://github.com/swcolegrove/css-override-web-extension",
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": true
   },
   "browser_action": {
     "default_icon": {
