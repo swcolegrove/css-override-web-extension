@@ -4,6 +4,7 @@ This is a web extension intended to allow you to override the css on specific do
 
 ## TODO:
 
-- In-extension editor
-- Allow for scss or less
+- Fix formatting in the editor textbox & issue with \n
+- Update styles
 - Error handling
+- Allow for scss or less

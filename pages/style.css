@@ -27,6 +27,14 @@ button:active {
   transform: translateY(1px);
 }
 
+button.error {
+  background: #b30000;
+}
+
+button.error:hover {
+ background: #990000;
+}
+
 ul {
   margin: 0;
   padding: 0;

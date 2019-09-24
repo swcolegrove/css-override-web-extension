@@ -5,10 +5,6 @@ const debug = (msg) => {
   console.log(`css-override-web-extension: ${msg}`);
 };
 
-const eraseAll = () => {
-  browser.storage.sync.clear()
-};
-
 const getStorageData = () => {
   return browser.storage.sync.get();
 };
@@ -107,10 +103,16 @@ const initializePage = () => {
   });
 };
 
+const btnEventDeleteEntry = () => {
+  browser.storage.sync.remove(ACTIVE_SITE_ID);
+  btnEventDoneEditing();
+  // initializePage()
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // TODO: Remove this
-  const btnClearStorage = document.getElementById('btnClearStorage');
-  btnClearStorage.addEventListener('click', eraseAll);
+  const btnDelete = document.getElementById('btnDelete');
+  btnDelete.addEventListener('click', btnEventDeleteEntry);
 
   const btnClear = document.getElementById('btnClear');
   btnClear.addEventListener('click', btnEventClearTextArea);
