@@ -39,3 +39,17 @@ button.off {
 button.off:hover {
   background: #474749;
 }
+
+button:disabled,
+button[disabled] {
+  cursor: not-allowed;
+  opacity: .5;
+  background: #616163;
+}
+
+button:disabled:hover,
+button[disabled]:hover,
+button:disabled:active {
+  background: #616163;
+  transform: none;
+}

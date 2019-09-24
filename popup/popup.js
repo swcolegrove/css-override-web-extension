@@ -22,13 +22,18 @@ const setStorageData = (obj) => {
   return browser.storage.sync.set(obj).then(() => true, () => false);
 }
 
-const updatePopup = (enabled) => {
+const updatePopup = (stylesEnabled, editorEnabled) => {
   const btnToggle = document.getElementById("btnToggle");
-  btnToggle.innerHTML = enabled ? 'ON' : 'OFF';
-  if (enabled) {
+  const btnOpenEditor = document.getElementById("btnOpenEditor");
+  btnToggle.innerHTML = stylesEnabled ? 'ON' : 'OFF';
+  if (stylesEnabled) {
     btnToggle.classList.remove('off');
   } else {
     btnToggle.classList.add('off');
+  }
+
+  if (!editorEnabled) {
+    btnOpenEditor.disabled = true;
   }
 }
 
@@ -61,7 +66,7 @@ const toggleStyles = async function() {
       url: tabUrl,
     },
   }).then((message) => {
-    updatePopup(enabled);
+    updatePopup(enabled, !!tabUrl);
   });
 }
 
@@ -70,11 +75,10 @@ const initializePopup = async function() {
   const tabUrl = getTabUrl(ACTIVE_TAB);
 
   let tabData = await getStorageData(tabUrl);
-  let enabled = true;
   if (tabData && tabData[tabUrl]) {
-    updatePopup(tabData[tabUrl].enabled);
+    updatePopup(tabData[tabUrl].enabled, !!tabUrl);
   } else {
-    updatePopup(false);
+    updatePopup(false, !!tabUrl);
   }
 };
 
