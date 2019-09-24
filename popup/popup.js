@@ -22,7 +22,7 @@ const setStorageData = (obj) => {
   return browser.storage.sync.set(obj).then(() => true, () => false);
 }
 
-const updatePopup = (stylesEnabled, editorEnabled) => {
+const updatePopup = (stylesEnabled) => {
   const btnToggle = document.getElementById("btnToggle");
   const btnOpenEditor = document.getElementById("btnOpenEditor");
   btnToggle.innerHTML = stylesEnabled ? 'ON' : 'OFF';
@@ -31,11 +31,17 @@ const updatePopup = (stylesEnabled, editorEnabled) => {
   } else {
     btnToggle.classList.add('off');
   }
-
-  if (!editorEnabled) {
-    btnOpenEditor.disabled = true;
-  }
 }
+
+const addSiteToStorage = async function(tabUrl, enabled = true) {
+  debug('Applying styles to site for first time')
+  let obj = {};
+  obj[tabUrl] = {
+    enabled,
+    style: ''
+  };
+  await setStorageData(obj);
+};
 
 const toggleStyles = async function() {
   debug('Toggle style')
@@ -51,12 +57,7 @@ const toggleStyles = async function() {
     enabled = tabData[tabUrl].enabled;
     await setStorageData(tabData);
   } else {
-    debug('Applying styles to site for first time')
-    let obj = {};
-    obj[tabUrl] = {
-      enabled
-    };
-    await setStorageData(obj);
+    addSiteToStorage(tabUrl)
   }
 
   browser.runtime.sendMessage({
@@ -66,7 +67,7 @@ const toggleStyles = async function() {
       url: tabUrl,
     },
   }).then((message) => {
-    updatePopup(enabled, !!tabUrl);
+    updatePopup(enabled);
   });
 }
 
@@ -76,17 +77,26 @@ const initializePopup = async function() {
 
   let tabData = await getStorageData(tabUrl);
   if (tabData && tabData[tabUrl]) {
-    updatePopup(tabData[tabUrl].enabled, !!tabUrl);
+    updatePopup(tabData[tabUrl].enabled);
   } else {
-    updatePopup(false, !!tabUrl);
+    updatePopup(false);
   }
 };
 
-const openEditorWindow = () => {
+const openEditorWindow = async function() {
+  const tabUrl = getTabUrl(ACTIVE_TAB);
+  const page = '../pages/editor.html'
+  const url = tabUrl ? `${page}?siteId=${tabUrl}` : page;
   const createData = {
-    url: '../pages/editor.html',
+    url,
     active: true,
   };
+
+  const tabData = await getStorageData(tabUrl);
+  if (!tabData || !tabData[tabUrl]) {
+    await addSiteToStorage(tabUrl, false);
+  }
+
   browser.tabs.create(createData).then((tab) => {
     // debug(JSON.stringify(tab))
     // const msg = {

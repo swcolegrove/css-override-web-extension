@@ -7,12 +7,20 @@
      <script src="editor.js"></script>
   </head>
   <body>
-    <h1>Custom Site Styles</h1>
-    <ul id="siteList">
-      <li>poopoo</li>
-      <li>poopoo</li>
-      <li>poopoo</li>
-    </ul>
-    <button id="btnClear">Clear storage</button>
+    <div id="listArea" class="list-area">
+      <p>Select the site styles you wish to edit</p>
+      <ul id="siteList">
+      </ul>
+    </div>
+    <div id="editorArea" class="editor-area">
+      <h1 id="siteName"></h1>
+      <div class="button-area">
+        <button id="btnClear">Clear</button>
+        <button id="btnSave">Save</button>
+        <button id="btnDone">Done</button>
+        <button id="btnClearStorage">EraseAll</button>
+      </div>
+      <textarea id="styleData" wrap="soft">
+    </div>
   </body>
 </html>

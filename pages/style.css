@@ -36,4 +36,32 @@ li {
   list-style-type: none;
   margin-bottom: 10px;
   cursor: pointer;
+  padding: 1rem;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  width: 100%;
+}
+
+textarea {
+  min-height: 300px;
+  width: 100%;
+  overflow: auto;
+}
+
+.button-area {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.button-area button {
+  margin-right: 10px;
+}
+
+.editor-area.hide,
+.list-area.hide {
+  display: none;
+}
+
+.editor-area {
+  width: 100%;
 }

@@ -8,11 +8,11 @@ const getStorageData = (domainKey) => {
 
 const getTabUrl = (tab) => new URL(tab.url).hostname;
 
-const toggleCSS = (tabId, enabled) => {
+const toggleCSS = (tabId, enabled, style) => {
   if (enabled) {
-    browser.tabs.insertCSS(tabId, {file: "resources/jira.css"});
+    browser.tabs.insertCSS(tabId, {code: style});
   } else {
-    browser.tabs.removeCSS(tabId, {file: "resources/jira.css"});
+    browser.tabs.removeCSS(tabId, {code: style});
   }
 };
 
@@ -21,7 +21,7 @@ const setTabStyle = (id, url) => {
     debug(JSON.stringify(tabData))
     if (tabData[url]) {
       const enabled = tabData[url].enabled;
-      toggleCSS(id, enabled)
+      toggleCSS(id, enabled, tabData[url].style)
     }
   });
 }
@@ -41,12 +41,27 @@ const reloadTab = (tab) => {
   setTabStyle(tab.id, tab.url)
 };
 
+const tabStyleChanged = (urlToUpdate) => {
+  const getAllTabs = browser.tabs.query({});
+    getAllTabs.then((tabs) => {
+    for (const tab of tabs) {
+      const tabUrl = getTabUrl(tab);
+      if (tabUrl === urlToUpdate) {
+        browser.tabs.reload(tab.id);
+      }
+    }
+  });
+}
+
 // Listen for actions passed from popup window
 const eventListener = (request, sender, sendResponse) => {
   debug(`Event listener action ${request.action}`);
   if (request.action === 'reloadTab') {
     reloadTab(request.tab);
     sendResponse({response: true});
+  } else if (request.action === 'updateStyle') {
+    // if styles for a url changed - update all its tabs
+    tabStyleChanged(request.tabUrl);
   }
 }
 
