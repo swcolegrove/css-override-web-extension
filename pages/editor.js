@@ -2,16 +2,13 @@ let SITE_DATA;
 let ACTIVE_SITE_ID;
 
 const debug = (msg) => {
-  console.log(`css-override-web-extension: ${msg}`);
+  console.log(`css-override-web-extension: ${msg}`); // eslint-disable-line
 };
 
-const getStorageData = () => {
-  return browser.storage.sync.get();
-};
+const getStorageData = () => browser.storage.sync.get();
 
 const editSiteStyles = () => {
   const txtAreaStyle = document.getElementById('styleData');
-
   const siteStyles = SITE_DATA[ACTIVE_SITE_ID].style;
   txtAreaStyle.value = siteStyles || '';
   const headingSiteName = document.getElementById('siteName');
@@ -24,29 +21,25 @@ const editSiteStyles = () => {
   listArea.classList.add('hide');
 };
 
-const listEventEditSiteStyles = function() {
+const listEventEditSiteStyles = function clickEditSite() {
   ACTIVE_SITE_ID = this.id;
   editSiteStyles();
 };
 
-const setStorageData = (obj) => {
-  return browser.storage.sync.set(obj).then(() => true, () => false);
-}
+const setStorageData = (obj) => browser.storage.sync.set(obj).then(() => true, () => false);
 
-const btnEventSaveStyles = async function() {
+const btnEventSaveStyles = async () => {
   const style = document.getElementById('styleData').value;
   const parsedStyle = style.trim();
 
-  let obj = {};
-  obj[ACTIVE_SITE_ID] = {...SITE_DATA[ACTIVE_SITE_ID]};
+  const obj = {};
+  obj[ACTIVE_SITE_ID] = { ...SITE_DATA[ACTIVE_SITE_ID] };
   obj[ACTIVE_SITE_ID].style = parsedStyle;
   await setStorageData(obj);
 
   browser.runtime.sendMessage({
     action: 'updateStyle',
     tabUrl: ACTIVE_SITE_ID,
-  }).then((message) => {
-
   });
 };
 
@@ -73,12 +66,12 @@ const initializePage = () => {
   ul.setAttribute('id', 'siteList');
   listArea.appendChild(ul);
 
-  getStorageData().then(storageData => {
+  getStorageData().then((storageData) => {
     debug(JSON.stringify(storageData));
     SITE_DATA = storageData;
 
     ulSiteList = document.getElementById('siteList');
-    Object.keys(SITE_DATA).forEach(site => {
+    Object.keys(SITE_DATA).forEach((site) => {
       const li = document.createElement('li');
       li.appendChild(document.createTextNode(site));
       li.setAttribute('id', site);
@@ -103,12 +96,12 @@ const btnEventDoneEditing = () => {
 
   const params = new URLSearchParams(document.location.search.substring(1));
   params.delete('siteId');
-  window.history.replaceState({}, '', `${location.pathname}?${params}`);
-  location.reload();
+  window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+  window.location.reload();
 };
 
 const btnEventDeleteEntry = () => {
-  const shouldDelete = confirm('Are you sure you want to delete this?');
+  const shouldDelete = confirm('Are you sure you want to delete this?'); // eslint-disable-line
   if (shouldDelete) {
     browser.storage.sync.remove(ACTIVE_SITE_ID);
     btnEventDoneEditing();
