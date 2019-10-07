@@ -16,12 +16,15 @@ const getStorageData = (domainKey) => browser.storage.sync.get(domainKey)
 const setStorageData = (obj) => browser.storage.sync.set(obj).then(() => true, () => false);
 
 const updatePopup = (stylesEnabled) => {
-  const btnToggle = document.getElementById('btnToggle');
-  btnToggle.innerHTML = stylesEnabled ? 'ON' : 'OFF';
+  const btnToggleON = document.getElementById('btnToggleON');
+  const btnToggleOFF = document.getElementById('btnToggleOFF');
+
   if (stylesEnabled) {
-    btnToggle.classList.remove('neutral');
+    btnToggleOFF.classList.add('hidden');
+    btnToggleON.classList.remove('hidden');
   } else {
-    btnToggle.classList.add('neutral');
+    btnToggleON.classList.add('hidden');
+    btnToggleOFF.classList.remove('hidden');
   }
 };
 
@@ -99,8 +102,10 @@ const openEditorWindow = async () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const btnToggle = document.getElementById('btnToggle');
-  btnToggle.addEventListener('click', toggleStyles);
+  const btnToggleON = document.getElementById('btnToggleON');
+  btnToggleON.addEventListener('click', toggleStyles);
+  const btnToggleOFF = document.getElementById('btnToggleOFF');
+  btnToggleOFF.addEventListener('click', toggleStyles);
 
   const btnOpenEditor = document.getElementById('btnOpenEditor');
   btnOpenEditor.addEventListener('click', openEditorWindow);
