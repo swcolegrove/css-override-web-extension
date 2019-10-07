@@ -35,7 +35,6 @@ const setStorageData = (obj) => {
 
 const btnEventSaveStyles = async function() {
   const style = document.getElementById('styleData').value;
-  // const parsedStyle = JSON.stringify(style).replace(/\\n/g, '');
   const parsedStyle = style.trim();
 
   let obj = {};
@@ -50,13 +49,6 @@ const btnEventSaveStyles = async function() {
 
   });
 };
-
-const btnEventDoneEditing = () => {
-  const editorArea = document.getElementById('editorArea');
-  editorArea.classList.add('hide');
-  const listArea = document.getElementById('listArea');
-  listArea.classList.remove('hide');
-}
 
 const btnEventClearTextArea = () => {
   document.getElementById('styleData').value = '';
@@ -103,22 +95,38 @@ const initializePage = () => {
   });
 };
 
+const btnEventDoneEditing = () => {
+  const editorArea = document.getElementById('editorArea');
+  editorArea.classList.add('hide');
+  const listArea = document.getElementById('listArea');
+  listArea.classList.remove('hide');
+
+  const params = new URLSearchParams(document.location.search.substring(1));
+  params.delete('siteId');
+  window.history.replaceState({}, '', `${location.pathname}?${params}`);
+  location.reload();
+};
+
 const btnEventDeleteEntry = () => {
-  browser.storage.sync.remove(ACTIVE_SITE_ID);
-  btnEventDoneEditing();
-  // initializePage()
+  const shouldDelete = confirm('Are you sure you want to delete this?');
+  if (shouldDelete) {
+    browser.storage.sync.remove(ACTIVE_SITE_ID);
+    btnEventDoneEditing();
+  }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  // TODO: Remove this
   const btnDelete = document.getElementById('btnDelete');
   btnDelete.addEventListener('click', btnEventDeleteEntry);
 
   const btnClear = document.getElementById('btnClear');
   btnClear.addEventListener('click', btnEventClearTextArea);
+
   const btnSave = document.getElementById('btnSave');
   btnSave.addEventListener('click', btnEventSaveStyles);
+
   const btnDone = document.getElementById('btnDone');
   btnDone.addEventListener('click', btnEventDoneEditing);
+
   initializePage();
 });

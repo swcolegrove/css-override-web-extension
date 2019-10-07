@@ -27,9 +27,9 @@ const updatePopup = (stylesEnabled) => {
   const btnOpenEditor = document.getElementById("btnOpenEditor");
   btnToggle.innerHTML = stylesEnabled ? 'ON' : 'OFF';
   if (stylesEnabled) {
-    btnToggle.classList.remove('off');
+    btnToggle.classList.remove('neutral');
   } else {
-    btnToggle.classList.add('off');
+    btnToggle.classList.add('neutral');
   }
 }
 
