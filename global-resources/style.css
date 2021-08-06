@@ -59,3 +59,7 @@ button.neutral {
 button.neutral:hover {
   background: #474749;
 }
+
+.hidden {
+  display: none;
+}

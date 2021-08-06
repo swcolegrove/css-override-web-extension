@@ -11,11 +11,21 @@ const editSiteStyles = () => {
   const txtAreaStyle = document.getElementById('styleData');
   const siteStyles = SITE_DATA[ACTIVE_SITE_ID].style;
   txtAreaStyle.value = siteStyles || '';
+
+  const editorArea = document.getElementById('editorArea');
+
   const headingSiteName = document.getElementById('siteName');
-  headingSiteName.innerHTML = `Editing: ${ACTIVE_SITE_ID}`;
+  if (headingSiteName) {
+    editorArea.removeChild(headingSiteName);
+  }
+
+  const heading = document.createElement('H1');
+  heading.setAttribute('id', 'siteName');
+  const headingText = document.createTextNode(`Editing: ${ACTIVE_SITE_ID}`);
+  heading.appendChild(headingText);
+  editorArea.insertBefore(heading, editorArea.childNodes[0]);
 
   // Hide site list & show editor
-  const editorArea = document.getElementById('editorArea');
   editorArea.classList.remove('hide');
   const listArea = document.getElementById('listArea');
   listArea.classList.add('hide');
